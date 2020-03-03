@@ -47,8 +47,7 @@ resource "aws_elasticache_subnet_group" "default" {
 
 resource "aws_elasticache_parameter_group" "default" {
   name   = local.cluster_name
-  family = "redis${var.engine_version}"
-
+  family = var.family
 }
 
 resource "aws_elasticache_cluster" "default" {

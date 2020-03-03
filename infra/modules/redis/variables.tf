@@ -16,6 +16,11 @@ variable "instance_type" {
   default = "cache.t3.micro"
 }
 
+variable "family" {
+  type = string
+  default = "redis4.0"
+}
+
 variable "engine_version" {
   type = string
   default = "4.0.10"
@@ -33,4 +38,3 @@ variable "allowed_cidr_block" {
 variable "allowed_security_group" {
   type = string
 }
-
