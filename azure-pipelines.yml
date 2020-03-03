@@ -430,7 +430,7 @@ jobs:
       - script: |
           set -exuo pipefail
           export DOCKER_BUILDKIT=1
-          docker build --progress=plain --no-cache=true -f packages/augur-tools/docker-builder/Dockerfile --build-arg fake_time=$(FAKE_TIME) --build-arg network_id=$(NETWORK_ID) -t $(IMAGE_NAME) .
+          docker build --progress=plain --no-cache=true -f packages/augur-tools/docker-builder/Dockerfile --build-arg fake_time=$(FAKE_TIME) --build-arg network_id=$(NETWORK_ID) -t "$(IMAGE_NAME):$(variables['Build.sourceBranch'])" .
         displayName: 'build $(IMAGE_NAME) image'
       - task: Docker@1
         displayName: docker login
@@ -442,8 +442,10 @@ jobs:
           set -exuo pipefail
           CONTRACT_SHA=$(cd packages/augur-tools/ && node scripts/get-contract-hashes.js)
           docker images
-          docker tag $(IMAGE_NAME) augurproject/$(IMAGE_NAME):"${CONTRACT_SHA}"
-          docker push augurproject/$(IMAGE_NAME):"${CONTRACT_SHA}"
+          docker tag $(IMAGE_NAME) augurproject/$(IMAGE_NAME):"${SOURCE_BRANCH}:${CONTRACT_SHA}"
+          docker push augurproject/$(IMAGE_NAME):"${SOURCE_BRANCH}:${CONTRACT_SHA}"
+        env:
+          SOURCE_BRANCH: $(variables['Build.sourceBranch'])
         displayName: Push Docker Images to hub
       - task: Docker@1
         displayName: docker logout
