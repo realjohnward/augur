@@ -442,6 +442,7 @@ export class DisputingBondsView extends Component<
       tentativeWinning,
       isInvalid,
     } = this.props;
+    const isWarpSync = market.isWarpSync;
     let inputToAttoRep = null;
     const { isScalar } = this.state;
     const min = formatAttoRep(market.noShowBondAmount).value;
@@ -452,11 +453,12 @@ export class DisputingBondsView extends Component<
       );
     }
     if (
-      isNaN(Number(inputStakeValue)) ||
+      !isWarpSync &&
+      (isNaN(Number(inputStakeValue)) ||
       inputStakeValue === '' ||
       inputStakeValue === '0' ||
       inputStakeValue === '.' ||
-      inputStakeValue === '0.'
+      inputStakeValue === '0.')
     ) {
       this.setState({ stakeError: 'Enter a valid number', disabled: true });
       return updateInputtedStake({ inputStakeValue, ZERO });
